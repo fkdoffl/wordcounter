@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
@@ -17,10 +18,10 @@ public class WordCounterService {
     private Translator translator;
     private final ConcurrentHashMap<String, Integer> wordCounts = new ConcurrentHashMap<>();
 
-    public void addWords(String[] words) throws IOException {
+    public void addWords(List<String> words) throws IOException {
         for (String word : words) {
             // Reject non-alphabetic characters
-            if (word.matches("^[a-zA-Z]+$")) {
+            if (isValidWord(word)) {
 //                String translatedWord = translator.translate(word);
                 String translatedWord = getTranslated(word);
                 String normalizedWord = translatedWord == null ? word.toLowerCase() :
@@ -28,6 +29,10 @@ public class WordCounterService {
                 wordCounts.merge(normalizedWord, 1, Integer::sum);
             }
         }
+    }
+
+    private boolean isValidWord(String word) {
+        return word.matches("^[a-zA-Z]+$");
     }
 
     private String getTranslated(String word) throws IOException {

@@ -9,11 +9,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class TranslateConfig {
 
-//    @Bean
-//    public ExternalTranslator externalTranslator() {
-//        return new ExternalTranslator();
-//    }
-
     @Bean
     public Translate translate() {
         return TranslateOptions.getDefaultInstance().getService();
